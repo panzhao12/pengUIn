@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import Mainstage from './components/MainStage.vue';
+import MainStage from './components/MainStage.vue';
 </script>
 
 <template>
   <header>
     <div>pengUIn</div>
   </header>
-
   <main>
-    <Mainstage />
+    <MainStage />
   </main>
 </template>
 

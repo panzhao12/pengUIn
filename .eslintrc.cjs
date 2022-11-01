@@ -17,7 +17,13 @@ module.exports = {
   rules: {
     'prettier/prettier': [
       'error',
-      { trailingComma: 'none', tabWidth: 2, semi: true, singleQuote: true }
+      {
+        trailingComma: 'none',
+        tabWidth: 2,
+        semi: true,
+        singleQuote: true,
+        endOfLine: 'auto'
+      }
     ]
   }
 };
