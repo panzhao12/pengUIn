@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-defineProps<{
-  count: number;
-}>();
+// defineProps<{
+//   count: number;
+// }>();
 
-const emit = defineEmits(['add']);
+// const emit = defineEmits(['add']);
 
-function add() {
-  emit('add');
-}
+// function add() {
+//   emit('add');
+// }
 </script>
 
 <template>
   <div>Olga</div>
-  <button @click="add">{{ count }}</button>
+  <button @click="add">ha</button>
 </template>

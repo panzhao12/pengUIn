@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import TextSticker from './TextSticker.vue';
 
 const messagesB1 = ref<Array<string>>([]);
 const messagesB3 = ref<Array<string>>([]);
