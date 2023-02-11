@@ -1,0 +1,122 @@
+[
+  {
+    "type": 0,
+    "name": "c2",
+    "keyCode": "KeyQ"
+  },
+  {
+    "type": 1,
+    "name": "c#2",
+    "keyCode": "Digit1"
+  },
+  {
+    "type": 0,
+    "name": "d2",
+    "keyCode": "KeyW"
+  },
+  {
+    "type": 1,
+    "name": "d#2",
+    "keyCode": "Digit2"
+  },
+  {
+    "type": 0,
+    "name": "e2",
+    "keyCode": "KeyE"
+  },
+  {
+    "type": 0,
+    "name": "f2",
+    "keyCode": "KeyR"
+  },
+  {
+    "type": 1,
+    "name": "f#2",
+    "keyCode": "Digit3"
+  },
+  {
+    "type": 0,
+    "name": "g2",
+    "keyCode": "KeyT"
+  },
+  {
+    "type": 1,
+    "name": "g#2",
+    "keyCode": "Digit4"
+  },
+  {
+    "type": 0,
+    "name": "a2",
+    "keyCode": "KeyY"
+  },
+  {
+    "type": 1,
+    "name": "a#2",
+    "keyCode": "Digit5"
+  },
+  {
+    "type": 0,
+    "name": "b2",
+    "keyCode": "KeyU"
+  },
+  {
+    "type": 0,
+    "name": "c3",
+    "keyCode": "KeyI"
+  },
+  {
+    "type": 1,
+    "name": "c#3",
+    "keyCode": "Digit6"
+  },
+  {
+    "type": 0,
+    "name": "d3",
+    "keyCode": "KeyO"
+  },
+  {
+    "type": 1,
+    "name": "d#3",
+    "keyCode": "Digit7"
+  },
+  {
+    "type": 0,
+    "name": "e3",
+    "keyCode": "KeyP"
+  },
+  {
+    "type": 0,
+    "name": "f3",
+    "keyCode": "BracketLeft"
+  },
+  {
+    "type": 1,
+    "name": "f#3",
+    "keyCode": "Digit8"
+  },
+  {
+    "type": 0,
+    "name": "g3",
+    "keyCode": "BracketRight"
+  },
+  {
+    "type": 1,
+    "name": "g#3",
+    "keyCode": "Digit9"
+  },
+  {
+    "type": 0,
+    "name": "a3",
+    "keyCode": "Backslash"
+  },
+  {
+    "type": 1,
+    "name": "a#3",
+    "keyCode": "Digit0"
+  },
+  {
+    "type": 0,
+    "name": "b3",
+    "keyCode": "Backspace"
+  }
+]

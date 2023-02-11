@@ -14,5 +14,4 @@ import { ref } from 'vue';
 
 <template>
   <div>Olga</div>
-  <button @click="add">ha</button>
 </template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import Piano from './ThePiano.vue';
 
 const messagesB1 = ref<Array<string>>([]);
 const messagesB3 = ref<Array<string>>([]);
@@ -35,9 +36,7 @@ function addMsg() {
     <div id="penguin">
       <img src="p.png" alt="penguin" @click="addMsg" />
     </div>
-    <div id="piano">
-      <img src="piano.png" alt="piano" />
-    </div>
+    <Piano />
   </div>
 
   <div id="b3">
@@ -59,7 +58,7 @@ function addMsg() {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 #b1 {
   grid-row-end: span 2;
 }
