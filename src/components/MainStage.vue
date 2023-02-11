@@ -34,7 +34,7 @@ function addMsg() {
 
   <div id="b2-5">
     <div id="penguin">
-      <img src="p.png" alt="penguin" @click="addMsg" />
+      <img src="/p.png" alt="penguin" @click="addMsg" />
     </div>
     <Piano />
   </div>
