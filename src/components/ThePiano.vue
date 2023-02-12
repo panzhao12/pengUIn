@@ -103,7 +103,7 @@ function releaseKey(key: string) {
       display: block;
       width: 32px;
       height: 117px;
-      background: red;
+      background: #000;
       border-radius: 0 0 4px 4px;
       box-shadow: 1px 1px 0 #555, 2px 2px 0 #555;
     }
