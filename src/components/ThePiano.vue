@@ -76,6 +76,9 @@ function releaseKey(key: string) {
   border-radius: 0 0 4px 4px;
 
   &__white-key {
+    display: flex;
+    justify-content: center;
+    align-items: end;
     float: left;
     position: relative;
     width: 50px;
@@ -87,6 +90,13 @@ function releaseKey(key: string) {
     &:active {
       background: #f4f3f3;
       box-shadow: inset 3px 2px 3px #999, inset -3px 2px 3px #999;
+    }
+
+    &::after {
+      content: attr(data-key);
+      justify-self: center;
+      text-transform: capitalize;
+      font-weight: 500;
     }
   }
 

@@ -24,7 +24,6 @@ function addMsg() {
 
 <template>
   <div id="b1">
-    <h2>Block1</h2>
     <ul>
       <li v-for="(msg, index) in messagesB1" :key="index">
         {{ msg }}
@@ -40,7 +39,6 @@ function addMsg() {
   </div>
 
   <div id="b3">
-    <h2>Block3</h2>
     <ul>
       <li v-for="(msg, index) in messagesB3" :key="index">
         {{ msg }}
@@ -49,7 +47,6 @@ function addMsg() {
   </div>
 
   <div id="b4">
-    <h2>Block4</h2>
     <ul>
       <li v-for="(msg, index) in messagesB4" :key="index">
         {{ msg }}
