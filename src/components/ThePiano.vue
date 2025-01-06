@@ -1,10 +1,49 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import keys from '../25key.json';
 import * as Tone from 'tone';
-import { addKeyBoardEvents } from '@/keyBoardEvents';
+import type { RecordedNote } from '@/types';
 
-// define the piano sampler
+const props = defineProps<{
+  isRecording: boolean;
+}>();
+
+const emit = defineEmits<{
+  (event: 'update:record', recordedNotes: RecordedNote[]): void;
+}>();
+
+const keyMap: { [key: string]: string } = {
+  z: 'c2',
+  s: 'c#2',
+  x: 'd2',
+  d: 'd#2',
+  c: 'e2',
+  v: 'f2',
+  g: 'f#2',
+  b: 'g2',
+  h: 'g#2',
+  n: 'a2',
+  j: 'a#2',
+  m: 'b2',
+  q: 'c3',
+  2: 'c#3',
+  w: 'd3',
+  3: 'd#3',
+  e: 'e3',
+  r: 'f3',
+  5: 'f#3',
+  t: 'g3',
+  6: 'g#3',
+  y: 'a3',
+  7: 'a#3',
+  u: 'b3'
+};
+
+const activeNotes = ref(new Set<string>());
+
+const recordedNotes = ref<RecordedNote[]>([]);
+
+// Initiate the piano sampler
 const sampler = new Tone.Sampler({
   urls: {
     A0: 'A0.mp3',
@@ -42,15 +81,74 @@ const sampler = new Tone.Sampler({
   baseUrl: 'https://tonejs.github.io/audio/salamander/'
 }).toDestination();
 
-addKeyBoardEvents(sampler);
+// Register keyboard events
+document.addEventListener('keydown', (e) => {
+  if (!(e.key in keyMap)) return;
 
-function playKey(key: string) {
-  sampler.triggerAttack(key);
+  const note = keyMap[e.key];
+  if (note && !activeNotes.value.has(note)) {
+    activeNotes.value.add(note);
+    playNote(note);
+  }
+});
+document.addEventListener('keyup', (e) => {
+  if (!(e.key in keyMap)) return;
+
+  const note = keyMap[e.key];
+  if (note && activeNotes.value.has(note)) {
+    activeNotes.value.delete(note);
+    releaseNote(note);
+  }
+});
+
+function playNote(note: string) {
+  sampler.triggerAttack(note);
+
+  if (!props.isRecording) return;
+
+  const hasRecordedNotes = recordedNotes.value.length !== 0;
+
+  // time stamp for starting playing the note
+  const startTimeStamp: number = hasRecordedNotes
+    ? recordedNotes.value[0].timeStamp
+    : 0;
+
+  recordedNotes.value.push({
+    note,
+    duration: Tone.now(),
+    timeStamp: Tone.now(),
+    startTime: hasRecordedNotes ? Tone.now() - startTimeStamp : startTimeStamp
+  });
 }
 
-function releaseKey(key: string) {
-  sampler.triggerRelease(key);
+function releaseNote(note: string) {
+  sampler.triggerRelease(note);
 }
+
+function replay() {
+  const data = localStorage.getItem('recordedNotes');
+  if (data) {
+    const recordedNotes = JSON.parse(data);
+    for (const recordedNote of recordedNotes) {
+      sampler.triggerAttackRelease(
+        recordedNote.note,
+        recordedNote.duration,
+        Tone.now() + recordedNote.startTime
+      );
+    }
+  }
+}
+
+watch(
+  () => props.isRecording,
+  (isRecording) => {
+    if (isRecording) {
+      recordedNotes.value = [];
+    } else {
+      emit('update:record', recordedNotes.value);
+    }
+  }
+);
 </script>
 
 <template>
@@ -58,12 +156,21 @@ function releaseKey(key: string) {
     <div
       v-for="(key, index) in keys"
       :key="index"
-      :class="key.type === 0 ? `keys__white-key` : `keys__black-key`"
+      :class="[
+        key.type === 0 ? `keys__white-key` : `keys__black-key`,
+        activeNotes.has(key.name)
+          ? key.type === 0
+            ? 'keys__white-key--active'
+            : 'keys__black-key--active'
+          : ''
+      ]"
       :data-key="key.name"
-      @mousedown="playKey(key.name)"
-      @mouseup="releaseKey(key.name)"
+      @mousedown="playNote(key.name)"
+      @mouseup="releaseNote(key.name)"
     ></div>
   </div>
+
+  <button @click="replay">Replay</button>
 </template>
 
 <style scoped lang="scss">
@@ -88,6 +195,11 @@ function releaseKey(key: string) {
     border-radius: 0 0 4px 4px;
 
     &:active {
+      background: #f4f3f3;
+      box-shadow: inset 3px 2px 3px #999, inset -3px 2px 3px #999;
+    }
+
+    &--active {
       background: #f4f3f3;
       box-shadow: inset 3px 2px 3px #999, inset -3px 2px 3px #999;
     }
@@ -119,6 +231,12 @@ function releaseKey(key: string) {
     }
 
     &:active::after {
+      background-color: rgb(36, 33, 33);
+      box-shadow: inset 3px 2px 3px rgb(58, 58, 58),
+        inset -3px 2px 3px rgb(58, 58, 58);
+    }
+
+    &--active::after {
       background-color: rgb(36, 33, 33);
       box-shadow: inset 3px 2px 3px rgb(58, 58, 58),
         inset -3px 2px 3px rgb(58, 58, 58);

@@ -5,13 +5,7 @@
   margin: 0 auto;
   padding: 0.5rem;
   font-weight: normal;
-  display: grid;
-  grid-template-columns: 22.5% 55% 22.5%;
-  /* grid-template-rows: 33.33% 33.33% 33.33%; */
-  grid-row-start: full;
-  grid-row-end: full;
-  grid-column-start: full;
-  grid-column-end: full;
+  display: flex;
   width: 100vw;
   height: 100vh;
 }
