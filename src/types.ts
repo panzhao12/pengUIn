@@ -1,5 +1,6 @@
 export interface RecordedNote {
-  note: string;
+  id: string;
+  name: string;
   duration: number;
   timeStamp: number;
   startTime: number;

@@ -87,7 +87,6 @@ document.addEventListener('keydown', (e) => {
 
   const note = keyMap[e.key];
   if (note && !activeNotes.value.has(note)) {
-    activeNotes.value.add(note);
     playNote(note);
   }
 });
@@ -96,16 +95,16 @@ document.addEventListener('keyup', (e) => {
 
   const note = keyMap[e.key];
   if (note && activeNotes.value.has(note)) {
-    activeNotes.value.delete(note);
     releaseNote(note);
   }
 });
 
 function playNote(note: string) {
+  activeNotes.value.add(note);
   sampler.triggerAttack(note);
 
+  // recording mode
   if (!props.isRecording) return;
-
   const hasRecordedNotes = recordedNotes.value.length !== 0;
 
   // time stamp for starting playing the note
@@ -114,7 +113,8 @@ function playNote(note: string) {
     : 0;
 
   recordedNotes.value.push({
-    note,
+    id: `${note}-${Date.now()}`,
+    name: note,
     duration: Tone.now(),
     timeStamp: Tone.now(),
     startTime: hasRecordedNotes ? Tone.now() - startTimeStamp : startTimeStamp
@@ -123,15 +123,32 @@ function playNote(note: string) {
 
 function releaseNote(note: string) {
   sampler.triggerRelease(note);
+  activeNotes.value.delete(note);
+
+  // recording mode
+  if (!props.isRecording) return;
+
+  // find the last matched play mode, because same note can be played and recorded multiple times
+  const playedNote = recordedNotes.value
+    .slice()
+    .reverse()
+    .find((recordedNote) => recordedNote.name === note);
+  const releasedNote = recordedNotes.value.find(
+    (recordedNote) => recordedNote.id === playedNote?.id
+  );
+
+  // update the duration of the played note
+  if (!releasedNote) return;
+  releasedNote.duration = Tone.now() - releasedNote.duration;
 }
 
 function replay() {
   const data = localStorage.getItem('recordedNotes');
   if (data) {
-    const recordedNotes = JSON.parse(data);
+    const recordedNotes = JSON.parse(data) as RecordedNote[];
     for (const recordedNote of recordedNotes) {
       sampler.triggerAttackRelease(
-        recordedNote.note,
+        recordedNote.name,
         recordedNote.duration,
         Tone.now() + recordedNote.startTime
       );
@@ -167,6 +184,7 @@ watch(
       :data-key="key.name"
       @mousedown="playNote(key.name)"
       @mouseup="releaseNote(key.name)"
+      @mouseleave="releaseNote(key.name)"
     ></div>
   </div>
 
@@ -181,6 +199,7 @@ watch(
   overflow: hidden;
   background: #000;
   border-radius: 0 0 4px 4px;
+  user-select: none;
 
   &__white-key {
     display: flex;
@@ -193,11 +212,6 @@ watch(
     margin: 0 2px 2px 0;
     background: #fff;
     border-radius: 0 0 4px 4px;
-
-    &:active {
-      background: #f4f3f3;
-      box-shadow: inset 3px 2px 3px #999, inset -3px 2px 3px #999;
-    }
 
     &--active {
       background: #f4f3f3;
@@ -228,12 +242,6 @@ watch(
       background: #000;
       border-radius: 0 0 4px 4px;
       box-shadow: 1px 1px 0 #555, 2px 2px 0 #555;
-    }
-
-    &:active::after {
-      background-color: rgb(36, 33, 33);
-      box-shadow: inset 3px 2px 3px rgb(58, 58, 58),
-        inset -3px 2px 3px rgb(58, 58, 58);
     }
 
     &--active::after {
