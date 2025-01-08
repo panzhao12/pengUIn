@@ -3,6 +3,7 @@ import { ref, watch } from 'vue';
 import keys from '../25key.json';
 import * as Tone from 'tone';
 import type { RecordedNote } from '@/types';
+import { sampler } from '@/sampler';
 
 const props = defineProps<{
   isRecording: boolean;
@@ -42,44 +43,6 @@ const keyMap: { [key: string]: string } = {
 const activeNotes = ref(new Set<string>());
 
 const recordedNotes = ref<RecordedNote[]>([]);
-
-// Initiate the piano sampler
-const sampler = new Tone.Sampler({
-  urls: {
-    A0: 'A0.mp3',
-    C1: 'C1.mp3',
-    'D#1': 'Ds1.mp3',
-    'F#1': 'Fs1.mp3',
-    A1: 'A1.mp3',
-    C2: 'C2.mp3',
-    'D#2': 'Ds2.mp3',
-    'F#2': 'Fs2.mp3',
-    A2: 'A2.mp3',
-    C3: 'C3.mp3',
-    'D#3': 'Ds3.mp3',
-    'F#3': 'Fs3.mp3',
-    A3: 'A3.mp3',
-    C4: 'C4.mp3',
-    'D#4': 'Ds4.mp3',
-    'F#4': 'Fs4.mp3',
-    A4: 'A4.mp3',
-    C5: 'C5.mp3',
-    'D#5': 'Ds5.mp3',
-    'F#5': 'Fs5.mp3',
-    A5: 'A5.mp3',
-    C6: 'C6.mp3',
-    'D#6': 'Ds6.mp3',
-    'F#6': 'Fs6.mp3',
-    A6: 'A6.mp3',
-    C7: 'C7.mp3',
-    'D#7': 'Ds7.mp3',
-    'F#7': 'Fs7.mp3',
-    A7: 'A7.mp3',
-    C8: 'C8.mp3'
-  },
-  release: 1,
-  baseUrl: 'https://tonejs.github.io/audio/salamander/'
-}).toDestination();
 
 // Register keyboard events
 document.addEventListener('keydown', (e) => {
@@ -142,20 +105,6 @@ function releaseNote(note: string) {
   releasedNote.duration = Tone.now() - releasedNote.duration;
 }
 
-function replay() {
-  const data = localStorage.getItem('recordedNotes');
-  if (data) {
-    const recordedNotes = JSON.parse(data) as RecordedNote[];
-    for (const recordedNote of recordedNotes) {
-      sampler.triggerAttackRelease(
-        recordedNote.name,
-        recordedNote.duration,
-        Tone.now() + recordedNote.startTime
-      );
-    }
-  }
-}
-
 watch(
   () => props.isRecording,
   (isRecording) => {
@@ -187,13 +136,11 @@ watch(
       @mouseleave="releaseNote(key.name)"
     ></div>
   </div>
-
-  <button @click="replay">Replay</button>
 </template>
 
 <style scoped lang="scss">
 .keys {
-  z-index: 1; //TODO
+  // z-index: 1;
   display: flex;
   padding: 2px 0 0 2px;
   overflow: hidden;
