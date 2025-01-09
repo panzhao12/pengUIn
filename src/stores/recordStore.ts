@@ -17,7 +17,8 @@ export const useRecordStore = defineStore('recordStore', () => {
         records.value.set(id, {
           title: data.title,
           description: data.description,
-          record: data.record
+          record: data.record as any as RecordedNote[],
+          createTime: data.create_time
         })
       );
     }
@@ -41,7 +42,8 @@ export const useRecordStore = defineStore('recordStore', () => {
       records.value.set(data[0].id, {
         title: data[0].title,
         description: data[0].description,
-        record: data[0].record
+        record: data[0].record as any as RecordedNote[],
+        createTime: data[0].create_time
       });
       console.log('Record saved successfully:', data[0]);
     }
