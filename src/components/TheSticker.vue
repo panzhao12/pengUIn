@@ -7,18 +7,16 @@ const props = defineProps<{
   id: string;
   title: string | null;
   description: string | null;
-  position: { x: number; y: number };
+  position: { x: number; y: number } | null;
 }>();
 
-const emit = defineEmits<{
-  play: void;
-}>();
+const emit = defineEmits(['play']);
 
 const stickerRef = useTemplateRef<HTMLDivElement>('stickerRef');
 
 // Make the sticker draggable
 const { x, y, style } = useDraggable(stickerRef, {
-  initialValue: props.position
+  initialValue: props.position ?? { x: 0, y: 0 }
 });
 
 // Listen for the mouseup event to emit the final position
