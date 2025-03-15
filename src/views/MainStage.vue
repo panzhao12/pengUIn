@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import ThePiano from './ThePiano.vue';
+import { computed, onMounted, ref, useTemplateRef } from 'vue';
+import ThePiano from '@/components/ThePiano.vue';
 import type { DialogInput, NoteRecord, RecordedNote } from '@/types';
 import { useRecordStore } from '@/stores/recordStore';
-import TheSticker from './TheSticker.vue';
+import TheSticker from '@/components/TheSticker.vue';
 import { sampler } from '@/sampler';
 import * as Tone from 'tone';
-import TheDialog from './TheDialog.vue';
+import TheDialog from '@/components/TheDialog.vue';
 
 const isRecording = ref(false);
 
@@ -17,7 +17,7 @@ const records = computed(() => recordStore.records);
 
 const recordedNotes = ref<RecordedNote[]>();
 
-const penguin = ref<HTMLImageElement>();
+const penguin = useTemplateRef<HTMLImageElement>('penguin');
 
 // Indicates the current jump position, used for the animation
 const currentY = ref(0);
@@ -91,29 +91,33 @@ async function handleFormSubmit(input: DialogInput) {
 
 <template>
   <div style="margin: auto">
-    <div v-for="[id, record] of records" :key="id">
-      <TheSticker
-        :title="record.title"
-        :description="record.description"
-        @update:play="playRecord(record)"
-      />
-    </div>
-
-    <div class="penguin">
-      <img
-        ref="penguin"
-        :class="isRecording ? 'penguin-jump' : ''"
-        src="/p.png"
-        alt="pengUIn"
-        draggable="false"
-        @click="toggleRecord"
-      />
-    </div>
-
-    <ThePiano
-      :is-recording="isRecording"
-      @update:record="(recordedNotes) => openSaveDialog(recordedNotes)"
+    <TheSticker
+      v-for="[id, record] of records"
+      :key="id"
+      :id="id"
+      :title="record.title"
+      :description="record.description"
+      :position="record.position"
+      @play="playRecord(record)"
     />
+
+    <div class="stage">
+      <div class="penguin">
+        <img
+          ref="penguin"
+          :class="isRecording ? 'penguin-jump' : ''"
+          src="/p.png"
+          alt="pengUIn"
+          draggable="false"
+          @click="toggleRecord"
+        />
+      </div>
+
+      <ThePiano
+        :is-recording="isRecording"
+        @update:record="(recordedNotes: RecordedNote[]) => openSaveDialog(recordedNotes)"
+      />
+    </div>
 
     <TheDialog style="z-index: 12" ref="dialog" @submit="handleFormSubmit">
       <h2>Enter information</h2>

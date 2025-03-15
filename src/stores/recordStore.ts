@@ -18,6 +18,7 @@ export const useRecordStore = defineStore('recordStore', () => {
           title: data.title,
           description: data.description,
           record: data.record as any as RecordedNote[],
+          position: data.position as any as { x: number; y: number },
           createTime: data.create_time
         })
       );
@@ -43,9 +44,36 @@ export const useRecordStore = defineStore('recordStore', () => {
         title: data[0].title,
         description: data[0].description,
         record: data[0].record as any as RecordedNote[],
+        position: data[0].position as any as { x: number; y: number },
         createTime: data[0].create_time
       });
       console.log('Record saved successfully:', data[0]);
+    }
+  }
+
+  async function updateRecordPosition(
+    id: string,
+    input: { x: number; y: number }
+  ) {
+    const { data, error } = await supabase
+      .from('records')
+      .update({
+        position: input
+      } as any)
+      .eq('id', id)
+      .select();
+
+    if (error) {
+      console.error('Error updating record:', error);
+    } else {
+      records.value.set(id, {
+        title: data[0].title,
+        description: data[0].description,
+        record: data[0].record as any as RecordedNote[],
+        position: data[0].position as any as { x: number; y: number },
+        createTime: data[0].create_time
+      });
+      console.log('Record updated successfully:', data[0]);
     }
   }
 
@@ -57,5 +85,5 @@ export const useRecordStore = defineStore('recordStore', () => {
   //     })
   //     .subscribe();
   // },
-  return { records, getAllRecords, saveRecord };
+  return { records, getAllRecords, saveRecord, updateRecordPosition };
 });

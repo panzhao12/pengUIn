@@ -39,6 +39,7 @@ export type Database = {
           create_time: string | null;
           description: string | null;
           id: string;
+          position: Json | null;
           record: Json;
           title: string | null;
         };
@@ -46,6 +47,7 @@ export type Database = {
           create_time?: string | null;
           description?: string | null;
           id?: string;
+          position?: Json | null;
           record: Json;
           title?: string | null;
         };
@@ -53,6 +55,7 @@ export type Database = {
           create_time?: string | null;
           description?: string | null;
           id?: string;
+          position?: Json | null;
           record?: Json;
           title?: string | null;
         };

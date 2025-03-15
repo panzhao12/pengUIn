@@ -11,9 +11,10 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.47.10",
+    "@vueuse/core": "^13.0.0",
     "pinia": "^2.0.23",
     "tone": "^14.7.77",
-    "vue": "^3.2.41"
+    "vue": "^3.5.13"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",

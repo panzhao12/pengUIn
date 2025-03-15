@@ -10,6 +10,7 @@ export interface NoteRecord {
   title: string | null;
   description: string | null;
   record: RecordedNote[] | null;
+  position: { x: number; y: number } | null;
   createTime: string | null;
 }
 

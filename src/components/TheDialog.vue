@@ -13,7 +13,7 @@
           id="title"
           type="text"
           placeholder="Enter title"
-          @keydown="(event) => event.stopPropagation()"
+          @keydown="(event: Event) => event.stopPropagation()"
         />
 
         <label for="description">Description:</label>
@@ -21,7 +21,7 @@
           v-model="description"
           id="description"
           placeholder="Enter description"
-          @keydown="(event) => event.stopPropagation()"
+          @keydown="(event: Event) => event.stopPropagation()"
         ></textarea>
 
         <!-- Buttons -->
