@@ -10,7 +10,7 @@
           v-model="title"
           id="title"
           type="text"
-          placeholder="Enter title"
+          placeholder="Give a cool name"
           @keydown="(event: Event) => event.stopPropagation()"
         />
 
@@ -18,7 +18,7 @@
         <textarea
           v-model="description"
           id="description"
-          placeholder="Enter description"
+          placeholder="Say something about it"
           @keydown="(event: Event) => event.stopPropagation()"
         ></textarea>
 
@@ -72,7 +72,7 @@ const resetForm = () => {
 // Function to handle form submission
 const submitForm = () => {
   const data: DialogInput = {
-    title: title.value,
+    title: title.value === '' ? '-' : title.value,
     description: description.value
   };
   emit('submit', data);

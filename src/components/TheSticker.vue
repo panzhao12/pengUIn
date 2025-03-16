@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRecordStore } from '@/stores/recordStore';
 import { useDraggable, useEventListener } from '@vueuse/core';
-import { useTemplateRef } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 
 const props = defineProps<{
   id: string;
@@ -14,9 +14,19 @@ const emit = defineEmits(['play']);
 
 const stickerRef = useTemplateRef<HTMLDivElement>('stickerRef');
 
+const isDragging = ref(false);
+
 // Make the sticker draggable
 const { x, y, style } = useDraggable(stickerRef, {
-  initialValue: props.position ?? { x: 0, y: 0 }
+  initialValue: props.position ?? { x: 0, y: 0 },
+  onMove: () => {
+    isDragging.value = true;
+  },
+  onEnd: () => {
+    setTimeout(() => {
+      isDragging.value = false;
+    }, 50);
+  }
 });
 
 // Listen for the mouseup event to emit the final position
@@ -32,7 +42,12 @@ async function updatePosition(id: string, position: { x: number; y: number }) {
 </script>
 
 <template>
-  <div :ref="`stickerRef`" class="sticker" :style="style" @click="emit('play')">
+  <div
+    :ref="`stickerRef`"
+    class="sticker"
+    :style="style"
+    @click="!isDragging && emit('play')"
+  >
     <div>🐧 {{ title }}</div>
     <div style="opacity: 0.5; overflow-y: auto">
       {{ description }}
