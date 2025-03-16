@@ -2,9 +2,7 @@
   <transition name="fade">
     <div v-if="visible" class="dialog-overlay" @click.self="close">
       <div class="dialog">
-        <h3 style="margin-bottom: 0.5rem; text-align: center">
-          &#128039; 完美！
-        </h3>
+        <h3 style="margin-bottom: 0.5rem; text-align: center">❤️ 完美！</h3>
 
         <!-- Form inputs -->
         <label for="title">Title:</label>
