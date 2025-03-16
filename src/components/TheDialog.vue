@@ -9,7 +9,7 @@
           ❤️ 完美！
         </h3>
         <div v-else style="margin-bottom: 0.5rem; text-align: center">
-          😇 Pleas make more than 2 notes
+          😇 Please make more than 2 notes
         </div>
 
         <!-- Form inputs -->
