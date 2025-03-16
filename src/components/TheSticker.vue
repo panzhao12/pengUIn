@@ -72,6 +72,7 @@ async function updatePosition(id: string, position: { x: number; y: number }) {
     0px 1px 2px -1px rgba(0, 0, 0, 0.1);
   border-radius: 0.25rem;
   border: #9ca3af4d 1px;
+  // background-color: #f9cc9d50;
 
   &:hover {
     box-shadow: 0px 8px 15px -3px rgba(0, 0, 0, 0.15),
