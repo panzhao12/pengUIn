@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRecordStore } from '@/stores/recordStore';
-import { useDraggable, useEventListener } from '@vueuse/core';
-import { ref, useTemplateRef } from 'vue';
+import { useDraggable } from '@vueuse/core';
+import { computed, ref, useTemplateRef } from 'vue';
 
 const props = defineProps<{
   id: string;
@@ -16,23 +16,27 @@ const stickerRef = useTemplateRef<HTMLDivElement>('stickerRef');
 
 const isDragging = ref(false);
 
+const position = computed(() => props.position);
+
 // Make the sticker draggable
 const { x, y, style } = useDraggable(stickerRef, {
   initialValue: props.position ?? { x: 0, y: 0 },
+  preventDefault: true,
+  stopPropagation: true,
   onMove: () => {
     isDragging.value = true;
   },
   onEnd: () => {
+    // update the position only if the sticker has moved
+    if (position.value?.x !== x.value || position.value?.y !== y.value) {
+      updatePosition(props.id, { x: x.value, y: y.value });
+    }
+
+    // reset the dragging state after a short delay, to prevent click events
     setTimeout(() => {
       isDragging.value = false;
     }, 50);
   }
-});
-
-// Listen for the mouseup event to emit the final position
-useEventListener(stickerRef, 'mouseup', () => {
-  updatePosition(props.id, { x: x.value, y: y.value });
-  console.log('mouseup', x.value, y.value);
 });
 
 // Update the position of the sticker
