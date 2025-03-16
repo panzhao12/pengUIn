@@ -130,7 +130,7 @@ watch(
             : 'keys__black-key--active'
           : ''
       ]"
-      :data-key="key.name"
+      :data-key="key.name === 'c3' ? 'c3' : ''"
       @mousedown="playNote(key.name)"
       @mouseup="releaseNote(key.name)"
       @mouseleave="releaseNote(key.name)"
