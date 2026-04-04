@@ -4,7 +4,7 @@ import type { DialogInput, NoteRecord, RecordedNote } from '@/types';
 import { supabase } from '@/database';
 
 export const useRecordStore = defineStore('recordStore', () => {
-  const records = ref<Map<string, NoteRecord>>(new Map());
+  const records = ref<Map<number, NoteRecord>>(new Map());
 
   async function getAllRecords() {
     const { data, error } = await supabase.from('records').select('*');
@@ -19,7 +19,7 @@ export const useRecordStore = defineStore('recordStore', () => {
           description: data.description,
           record: data.record as any as RecordedNote[],
           position: data.position as any as { x: number; y: number },
-          createTime: data.create_time
+          createTime: data.created_at
         })
       );
     }
@@ -45,14 +45,14 @@ export const useRecordStore = defineStore('recordStore', () => {
         description: data[0].description,
         record: data[0].record as any as RecordedNote[],
         position: data[0].position as any as { x: number; y: number },
-        createTime: data[0].create_time
+        createTime: data[0].created_at
       });
       console.log('Record saved successfully:', data[0]);
     }
   }
 
   async function updateRecordPosition(
-    id: string,
+    id: number,
     input: { x: number; y: number }
   ) {
     const { data, error } = await supabase
@@ -71,7 +71,7 @@ export const useRecordStore = defineStore('recordStore', () => {
         description: data[0].description,
         record: data[0].record as any as RecordedNote[],
         position: data[0].position as any as { x: number; y: number },
-        createTime: data[0].create_time
+        createTime: data[0].created_at
       });
       console.log('Record updated successfully:', data[0]);
     }

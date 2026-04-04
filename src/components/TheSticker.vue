@@ -4,7 +4,7 @@ import { useDraggable } from '@vueuse/core';
 import { computed, onMounted, ref, useTemplateRef } from 'vue';
 
 const props = defineProps<{
-  id: string;
+  id: number;
   title: string | null;
   description: string | null;
   position: { x: number; y: number } | null;
@@ -54,7 +54,7 @@ function handlePlay() {
 }
 
 // Update the position of the sticker
-async function updatePosition(id: string, position: { x: number; y: number }) {
+async function updatePosition(id: number, position: { x: number; y: number }) {
   await useRecordStore().updateRecordPosition(id, position);
 }
 
