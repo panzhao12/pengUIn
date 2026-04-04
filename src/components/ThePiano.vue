@@ -140,13 +140,13 @@ watch(
 
 <style scoped lang="scss">
 .keys {
-  // z-index: 1;
   display: flex;
   padding: 2px 0 0 2px;
   overflow: hidden;
-  background: #000;
-  border-radius: 0 0 4px 4px;
+  background: var(--penguin-black);
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   user-select: none;
+  box-shadow: var(--shadow-md);
 
   &__white-key {
     display: flex;
@@ -157,12 +157,17 @@ watch(
     width: 50px;
     height: 180px;
     margin: 0 2px 2px 0;
-    background: #fff;
-    border-radius: 0 0 4px 4px;
+    background: var(--penguin-white);
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    transition: transform 0.05s ease, box-shadow 0.05s ease,
+      background 0.05s ease;
 
     &--active {
-      background: #f4f3f3;
-      box-shadow: inset 3px 2px 3px #999, inset -3px 2px 3px #999;
+      background: #eeede9;
+      transform: scaleY(0.98);
+      transform-origin: top;
+      box-shadow: inset 2px 2px 4px rgba(26, 26, 46, 0.15),
+        inset -2px 2px 4px rgba(26, 26, 46, 0.15);
     }
 
     &::after {
@@ -170,6 +175,9 @@ watch(
       justify-self: center;
       text-transform: capitalize;
       font-weight: 500;
+      font-size: 0.6875rem;
+      color: var(--slate);
+      padding-bottom: var(--space-2);
     }
   }
 
@@ -186,15 +194,20 @@ watch(
       display: block;
       width: 32px;
       height: 117px;
-      background: #000;
-      border-radius: 0 0 4px 4px;
-      box-shadow: 1px 1px 0 #555, 2px 2px 0 #555;
+      background: linear-gradient(
+        180deg,
+        #0e0e1e 0%,
+        var(--penguin-black) 100%
+      );
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+      box-shadow: 1px 1px 0 #444, 2px 2px 0 #444;
+      transition: background 0.05s ease, box-shadow 0.05s ease;
     }
 
     &--active::after {
-      background-color: rgb(36, 33, 33);
-      box-shadow: inset 3px 2px 3px rgb(58, 58, 58),
-        inset -3px 2px 3px rgb(58, 58, 58);
+      background: linear-gradient(180deg, #1a1a30 0%, #2a2a3e 100%);
+      box-shadow: inset 2px 1px 3px rgba(80, 80, 100, 0.5),
+        inset -2px 1px 3px rgba(80, 80, 100, 0.5);
     }
   }
 }
