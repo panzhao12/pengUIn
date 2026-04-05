@@ -20,6 +20,8 @@
   --text-secondary: var(--slate);
   --accent-record: var(--coral);
   --accent-record-soft: var(--coral-soft);
+  --accent-play: #2e6ee6;
+  --accent-play-soft: rgba(46, 110, 230, 0.2);
   --accent-sticker: var(--amber);
   --accent-sticker-bg: var(--amber-soft);
   --border: var(--slate-light);

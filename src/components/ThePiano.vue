@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, useTemplateRef, watch } from 'vue';
 import keys from '../25key.json';
 import * as Tone from 'tone';
 import type { RecordedNote } from '@/types';
@@ -63,6 +63,7 @@ document.addEventListener('keyup', (e) => {
 });
 
 function playNote(note: string) {
+  if (activeNotes.value.has(note)) return;
   activeNotes.value.add(note);
   sampler.triggerAttack(note);
 
@@ -85,6 +86,7 @@ function playNote(note: string) {
 }
 
 function releaseNote(note: string) {
+  if (!activeNotes.value.has(note)) return;
   sampler.triggerRelease(note);
   activeNotes.value.delete(note);
 
@@ -111,14 +113,29 @@ watch(
     if (isRecording) {
       recordedNotes.value = [];
     } else {
+      // Force release any notes still held down to properly calculate their durations
+      const currentlyActive = Array.from(activeNotes.value);
+      currentlyActive.forEach((note) => {
+        releaseNote(note, true); // Force update despite props.isRecording being false
+      });
       emit('update:record', recordedNotes.value);
     }
   }
 );
+function triggerVisualNote(note: string, duration: number) {
+  activeNotes.value.add(note);
+  setTimeout(() => {
+    activeNotes.value.delete(note);
+  }, duration * 1000);
+}
+
+const keysRef = useTemplateRef<HTMLDivElement>('keysRef');
+
+defineExpose({ triggerVisualNote, keysEl: keysRef });
 </script>
 
 <template>
-  <div class="keys">
+  <div ref="keysRef" class="keys">
     <div
       v-for="(key, index) in keys"
       :key="index"
