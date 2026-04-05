@@ -128,7 +128,7 @@ const submitForm = () => {
     </div>
   </transition>
 </template>
-<style scoped>
+<style scoped lang="scss">
 .dialog-overlay {
   position: fixed;
   top: 0;

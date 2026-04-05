@@ -204,7 +204,7 @@ function scheduleNotes(notes: any[], offsetTime: number) {
 }
 
 // Reference to piano component
-const pianoRef = useTemplateRef('pianoRef');
+const pianoRef = useTemplateRef<InstanceType<typeof ThePiano>>('pianoRef');
 
 // Reference to dialog components
 const dialog = ref<InstanceType<typeof TheDialog>>();
