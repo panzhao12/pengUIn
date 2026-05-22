@@ -1,0 +1,17 @@
+name: Supabase Keep Alive
+
+on:
+  schedule:
+    # 每周一和周四的上午 9:00 (UTC) 自动运行一次
+    - cron: '0 9 * * 1,4'
+  workflow_dispatch: # 允许你在 GitHub 页面手动点击运行测试
+
+jobs:
+  ping_supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping PostgREST API
+        run: |
+          curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/records?select=id&limit=1" \
+          -H "apikey: ${{ secrets.SUPABASE_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}"
