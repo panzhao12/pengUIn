@@ -2,16 +2,34 @@ name: Supabase Keep Alive
 
 on:
   schedule:
-    # 每周一和周四的上午 9:00 (UTC) 自动运行一次
-    - cron: '0 9 * * 1,4'
-  workflow_dispatch: # 允许你在 GitHub 页面手动点击运行测试
+    # Run every 3 days (Mon, Thu, Sun) at 09:00 UTC — well within the 7-day inactivity limit
+    - cron: '0 9 * * 0,3,6'
+  workflow_dispatch: # Allow manual trigger from GitHub Actions UI
 
 jobs:
   ping_supabase:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping PostgREST API
+      - name: Ping Supabase database via REST API
+        env:
+          # Use repo secrets if set, otherwise fall back to the known project values
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
-          curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/records?select=id&limit=1" \
-          -H "apikey: ${{ secrets.SUPABASE_KEY }}" \
-          -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}"
+          echo "Pinging Supabase at: $SUPABASE_URL"
+
+          # --fail makes curl exit non-zero on HTTP 4xx/5xx errors (so the job actually fails)
+          # The URL is quoted to prevent shell from interpreting & as a background operator
+          HTTP_STATUS=$(curl --fail --silent --output /dev/null --write-out "%{http_code}" \
+            -X GET "${SUPABASE_URL}/rest/v1/records?select=id&limit=1" \
+            -H "apikey: ${SUPABASE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_KEY}")
+
+          echo "HTTP Status: $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
+            echo "✅ Supabase database ping successful — inactivity timer reset."
+          else
+            echo "❌ Ping failed with HTTP status $HTTP_STATUS"
+            exit 1
+          fi
